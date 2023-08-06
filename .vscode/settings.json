@@ -4,5 +4,6 @@
   },
   "[django-html]": {
     "editor.defaultFormatter": null
-  }
+  },
+  "editor.formatOnSave": false
 }

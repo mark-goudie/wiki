@@ -1,5 +1,13 @@
-<h1>{{ title }}</h1>
-<div>{{ content | safe }}</div>
-<a href="{% url 'edit' title=title %}">Edit this page</a>
-<br>
-<a href="{% url 'index' %}">Back to Home</a>
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+  {{ title }} - Wiki
+{% endblock %}
+
+{% block body %}
+  <h1>{{ title }}</h1>
+  <div>{{ content | safe }}</div>
+  <a href="{% url 'edit' title=title %}">Edit this page</a>
+  <br />
+  <a href="{% url 'index' %}">Back to Home</a>
+{% endblock %}

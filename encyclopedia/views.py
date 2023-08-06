@@ -49,6 +49,9 @@ def create(request):
             content = form.cleaned_data["content"]
             if util.get_entry(title) is not None:
                 messages.error(request, "An entry with this title already exists.")
+                return render(request, "encyclopedia/create.html", { 
+                    "form": form
+                })
             else:
                 util.save_entry(title, content)
                 return redirect("entry", title=title)
@@ -59,28 +62,29 @@ def create(request):
         "form": form
     })
 
-def edit(request, title):
-        if request.method == 'POST':
-            form = NewEntryForm(request.POST)
-            if form.is_valid():
-                content = form.cleaned_data["content"]
-                util.save_entry(title, content)
-                return redirect('entry', title=title)
-            else:
-                return render(request, "encyclopedia/edit.html", {
-                    "form": form,
-                    "edit": True,
-                    "title": title
-                })
 
+def edit(request, title):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            util.save_entry(title, content)
+            return redirect('entry', title=title)
         else:
-            page_content = util.get_entry(title)
-            form = NewEntryForm(initial={'content': page_content})
             return render(request, "encyclopedia/edit.html", {
-                "form": form,
+                "content": content,
                 "edit": True,
-                "title": title
+                "title": title,
+                "error": "Content must not be empty."
             })
+    else:
+        page_content = util.get_entry(title)
+        return render(request, "encyclopedia/edit.html", {
+            "content": page_content,
+            "edit": True,
+            "title": title
+        })
+
+
 
 
 def random_entry(request):
